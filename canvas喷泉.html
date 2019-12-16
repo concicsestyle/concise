@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#myCanvas{
+				margin: 0 auto;
+				display: block;
+				border:  1px solid #00BFFF;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="600px" height="600px"></canvas>
+		<script>
+			var canvas=document.querySelector('#myCanvas');
+			var ctx=canvas.getContext('2d');
+			//画布高度
+			var canvasH=canvas.clientHeight;
+			var canvasW=canvas.clientWidth;
+			/*
+				x,y坐标
+				sx,sy速度sx固定  在-2,2之间
+				
+			*/
+		   class Bubble{
+			   constructor(ctx,x,y){//第一个参数为 context上下文
+				   this.ctx=ctx;
+				   this.x=x;
+				   this.y=y;
+				   this.sy=0;
+				   this.sx=0;
+				   this.color='#00BFFF';
+				   this.g=0.1;
+				   this.init();
+			   }
+			   init(){
+				   this.sx=Math.random()*4-2;//-2 -- 2
+				   this.sy=Math.random()*2-10;//-8 -- -12
+				   this.color='rgba('+parseInt(Math.random()*(255-140)+140)+','+parseInt(Math.random()*(255-140)+140)+','+parseInt(Math.random()*(255-140)+140)+','+(Math.random()*(1-0.5)+0.5)+')';
+			   }
+			   render(){
+				   this.ctx.beginPath();
+				   this.ctx.fillStyle=this.color;
+				   this.ctx.arc(this.x,this.y,13,0,2*Math.PI,false);
+				   this.ctx.fill()
+			   }
+			   update(){
+				   this.sy+=this.g;
+				   this.y+=this.sy;
+				   this.x+=this.sx;
+				   // this.render();
+				   this.render();
+			   }
+		   }
+		   var arr=[],conut=0;
+		   function update(){
+			   
+			   var t1=setInterval(()=>{
+				   conut++;
+				   ctx.clearRect(0,0,canvasW,canvasH)
+				   if(conut%2==0){
+					  var b= new Bubble(ctx,canvasW/2,canvasH-20);
+					  arr.push(b); 
+				   }
+				   for(let i=0;i<arr.length;i++){
+					   arr[i].update();
+				   }
+				   if(arr.length>200){
+					   arr.shift(); 
+				   }
+				   
+			   },20)
+		   }
+		   update()
+		</script>
+	</body>
+</html>
